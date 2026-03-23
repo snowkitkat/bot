@@ -1,0 +1,145 @@
+import discord
+from discord import app_commands
+from discord.ext import commands
+import json
+import os
+from dotenv import load_dotenv
+
+# -----------------------------
+# Load .env token
+# -----------------------------
+load_dotenv()
+TOKEN = os.getenv("DISCORD_TOKEN")
+if not TOKEN:
+    raise ValueError("Bot token not found in .env!")
+
+# -----------------------------
+# JSON config for dynamic settings
+# -----------------------------
+CONFIG_FILE = "config.json"
+
+def load_config():
+    try:
+        with open(CONFIG_FILE, "r") as f:
+            return json.load(f)
+    except:
+        return {"ban_role_id": None, "target_channel_id": None}
+
+def save_config(config):
+    with open(CONFIG_FILE, "w") as f:
+        json.dump(config, f, indent=4)
+
+config_data = load_config()
+
+# -----------------------------
+# Bot setup
+# -----------------------------
+intents = discord.Intents.default()
+intents.members = True  # Required for role checks
+bot = commands.Bot(command_prefix="!", intents=intents)
+
+# -----------------------------
+# Modal for question submission
+# -----------------------------
+class QuestionModal(discord.ui.Modal, title="Submit a Question"):
+    question = discord.ui.TextInput(
+        label="Your Question",
+        style=discord.TextStyle.paragraph,
+        required=True,
+        max_length=1000
+    )
+
+    def __init__(self, anonymous: bool, user: discord.Member):
+        super().__init__()
+        self.anonymous = anonymous
+        self.user = user
+
+    async def on_submit(self, interaction: discord.Interaction):
+        channel_id = config_data.get("target_channel_id")
+        channel = interaction.client.get_channel(channel_id) if channel_id else None
+
+        if not channel:
+            await interaction.response.send_message(
+                "❌ Target channel not configured.", ephemeral=True
+            )
+            return
+
+        embed = discord.Embed(title="📩 New Question Submitted", color=discord.Color.blurple())
+        embed.add_field(name="Question", value=self.question.value, inline=False)
+        embed.add_field(name="Anonymous?", value="Yes" if self.anonymous else "No")
+        embed.add_field(name="Sender", value=f"{self.user} ({self.user.mention})", inline=False)
+        embed.set_footer(text=f"User ID: {self.user.id}")
+
+        await channel.send(embed=embed)
+        await interaction.response.send_message("✅ Your question has been submitted!", ephemeral=True)
+
+    async def on_error(self, interaction: discord.Interaction, error: Exception):
+        print("MODAL ERROR:", error)
+        if not interaction.response.is_done():
+            await interaction.response.send_message("❌ Failed to submit your question.", ephemeral=True)
+
+# -----------------------------
+# /question command
+# -----------------------------
+@bot.tree.command(name="question", description="Submit a question")
+@app_commands.describe(anonymous="Would you like this question to be anonymous?")
+async def question(interaction: discord.Interaction, anonymous: bool):
+    try:
+        if not interaction.guild:
+            await interaction.response.send_message("❌ This command can only be used in a server.", ephemeral=True)
+            return
+
+        member: discord.Member = interaction.user
+
+        # Ban role check
+        ban_role_id = config_data.get("ban_role_id")
+        if ban_role_id and any(role.id == ban_role_id for role in member.roles):
+            await interaction.response.send_message("🚫 You are not allowed to use this command.", ephemeral=True)
+            return
+
+        # Send the modal
+        await interaction.response.send_modal(QuestionModal(anonymous, member))
+
+    except Exception as e:
+        print("ERROR in /question:", e)
+        if not interaction.response.is_done():
+            await interaction.response.send_message("❌ An internal error occurred.", ephemeral=True)
+
+# -----------------------------
+# Admin commands
+# -----------------------------
+@bot.tree.command(name="set_ban_role", description="Set the role that cannot use /question")
+@app_commands.describe(role="Role to block from using /question")
+async def set_ban_role(interaction: discord.Interaction, role: discord.Role):
+    if not interaction.user.guild_permissions.administrator:
+        await interaction.response.send_message("🚫 You must be an admin to use this command.", ephemeral=True)
+        return
+
+    config_data["ban_role_id"] = role.id
+    save_config(config_data)
+    await interaction.response.send_message(f"✅ Ban role set to {role.name}", ephemeral=True)
+
+@bot.tree.command(name="set_target_channel", description="Set the channel where questions are sent")
+@app_commands.describe(channel="Channel to send questions to")
+async def set_target_channel(interaction: discord.Interaction, channel: discord.TextChannel):
+    if not interaction.user.guild_permissions.administrator:
+        await interaction.response.send_message("🚫 You must be an admin to use this command.", ephemeral=True)
+        return
+
+    config_data["target_channel_id"] = channel.id
+    save_config(config_data)
+    await interaction.response.send_message(f"✅ Target channel set to {channel.mention}", ephemeral=True)
+
+# -----------------------------
+# Ready event
+# -----------------------------
+@bot.event
+async def on_ready():
+    # Global slash command registration
+    await bot.tree.sync()  
+    print(f"✅ Logged in as {bot.user} (ID: {bot.user.id})")
+
+# -----------------------------
+# Run bot
+# -----------------------------
+bot.run(TOKEN)

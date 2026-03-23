@@ -1,0 +1,5 @@
+# Pin major versions — run `pip install -r requirements.txt` to install.
+# Run `pip list --outdated` regularly to catch security patches.
+discord.py>=2.4.0,<3.0.0
+python-dotenv>=1.0.0,<2.0.0
+aiofiles>=23.0.0,<25.0.0    # async file I/O — keeps disk writes off the event loop
