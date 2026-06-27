@@ -1,0 +1,106 @@
+{
+  "RPT-GXQV5J": {
+    "type": "report",
+    "userId": "438552399943172106",
+    "guildId": "1427060195531427893",
+    "data": {
+      "platform": "Zaibatsu",
+      "category": "1",
+      "offenderUsername": "1",
+      "offenderUserId": "1",
+      "offenderDisplayName": "1",
+      "description": "1",
+      "evidence": "1"
+    },
+    "status": "open",
+    "createdAt": 1782581956372,
+    "claimedBy": null,
+    "involvedStaff": [],
+    "dmMessageIds": [
+      "1520483677078028389"
+    ],
+    "threadId": "1520483674137559083",
+    "channelId": "1516653833844035624",
+    "messageId": "1520483674137559083"
+  },
+  "RPT-OT239Y": {
+    "type": "report",
+    "userId": "438552399943172106",
+    "guildId": "1427060195531427893",
+    "data": {
+      "category": "bad",
+      "offenderUsername": "bob",
+      "offenderUserId": "1234",
+      "offenderDisplayName": "bob_real",
+      "description": "test",
+      "platform": "Neon District 2051",
+      "evidence": "test"
+    },
+    "status": "ignored",
+    "createdAt": 1782583030519,
+    "claimedBy": "438552399943172106",
+    "involvedStaff": [
+      "438552399943172106"
+    ],
+    "dmMessageIds": [
+      "1520488189410676817",
+      "1520488357120049234"
+    ],
+    "threadId": "1520488180418216101",
+    "channelId": "1516653833844035624",
+    "messageId": "1520488180418216101",
+    "claimedAt": 1782583075163,
+    "handledBy": "438552399943172106",
+    "handledAt": 1782583119769
+  },
+  "APL-2792AH": {
+    "type": "appeal",
+    "userId": "438552399943172106",
+    "guildId": "1427060195531427893",
+    "data": {
+      "game": "Zaibatsu",
+      "punishment": "ban",
+      "username": "1234",
+      "userId": "1234",
+      "reason": "1234",
+      "additional": "1234"
+    },
+    "status": "ignored",
+    "createdAt": 1782583161270,
+    "claimedBy": null,
+    "involvedStaff": [],
+    "dmMessageIds": [],
+    "threadId": "1520488728357769308",
+    "channelId": "1516653842006020247",
+    "messageId": "1520488728357769308",
+    "handledBy": "438552399943172106",
+    "handledAt": 1782583184362
+  },
+  "RPT-LD8LIK": {
+    "type": "report",
+    "userId": "438552399943172106",
+    "guildId": "1427060195531427893",
+    "data": {
+      "category": "test",
+      "offenderUsername": "test",
+      "offenderUserId": "test",
+      "offenderDisplayName": "test",
+      "description": "test",
+      "platform": "Zaibatsu",
+      "evidence": null
+    },
+    "status": "handled",
+    "createdAt": 1782584106952,
+    "claimedBy": null,
+    "involvedStaff": [],
+    "dmMessageIds": [
+      "1520492697113333993"
+    ],
+    "threadId": "1520492694831628460",
+    "channelId": "1516653833844035624",
+    "messageId": "1520492694831628460",
+    "handledBy": "438552399943172106",
+    "handledAt": 1782584126128,
+    "modNote": "fuck fuck fuck fuck fuck"
+  }
+}

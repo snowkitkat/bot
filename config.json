@@ -1,0 +1,14 @@
+{
+  "1427060195531427893": {
+    "channels": {
+      "report": "1516653833844035624",
+      "appeal": "1516653842006020247"
+    },
+    "qa": {
+      "targetChannelId": "1520495388577235265",
+      "answerChannelId": "1520495396848144515",
+      "banRoleId": null,
+      "adminRoleIds": []
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "zaibatsu-ticket-bot",
+  "version": "1.0.0",
+  "description": "Multi-type ticket bot with role-tiered staff, claiming, and DM-relayed thread conversations",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5"
+  },
+  "overrides": {
+    "undici": "6.27.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
