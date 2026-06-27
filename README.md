@@ -1,2 +1,2 @@
 # bot
-question bot
+bot n shit
